@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools==70.2.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Django_Web_App_for_SWE_Bench_Evaluation"
+version = "0.1.0"
+description = "Private API to evaluate your LLM with SWEBench."
+readme = "README.md"
+requires-python = "==3.12.4"
+
+dependencies = [
+  "Django>=5.2.1",
+  "djangorestframework==3.16.0",
+  "python-decouple==3.8",
+  "djangorestframework-api-key==3.1",
+  # Add any other libraries you use
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
