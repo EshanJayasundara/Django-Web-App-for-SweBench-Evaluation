@@ -26,15 +26,15 @@ class SweAPIView(APIView):
     permission_classes = [HasAPIKey]
 
     def get(self, request, id=None):
-        APP_DIR = config('APP_DIR')
-        swebench_python = "SWE-bench/.venv/bin/python3"
-        swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
+        # APP_DIR = config('APP_DIR')
+        # swebench_python = "SWE-bench/.venv/bin/python3"
+        # swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
 
-        dataset_name = request.GET.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
-        max_workers = request.GET.get('max_workers', '')
-        instance_ids = request.GET.get('instance_ids', 'sympy__sympy-20590')
-        run_id = request.GET.get('run_id', 'validate_gold')
-        model = request.GET.get('model', 'gpt-4-turbo-preview')
+        # dataset_name = request.GET.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
+        # max_workers = request.GET.get('max_workers', 1)
+        # instance_ids = request.GET.get('instance_ids', 'sympy__sympy-20590')
+        # run_id = request.GET.get('run_id', 'validate_gold')
+        # prediction = request.GET.get('prediction')
         
         # try:
         #     result = subprocess.run(
