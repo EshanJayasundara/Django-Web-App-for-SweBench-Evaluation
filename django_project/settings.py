@@ -25,8 +25,11 @@ SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=False)
 
 
-ALLOWED_HOSTS = ["34.66.28.247", "127.0.0.1", "localhost", "eshan-swe-eval.mooo.com"]
+ALLOWED_HOSTS = ["34.66.28.247", "127.0.0.1", "localhost", "eshan-swe-eval.mooo.com", "www.eshan-swe-eval.mooo.com"]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://eshan-swe-eval.mooo.com',
+]
 
 # Application definition
 
