@@ -55,7 +55,7 @@ jobs:
               cd $APP_DIR
               echo "Activating existing venv..."
                source .venv/bin/activate
-              echo -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY\nDEBUG=$DEBUG" > .env
+              echo -e "DJANGO_SECRET_KEY='$DJANGO_SECRET_KEY'\nDEBUG=$DEBUG" > .env
               python manage.py migrate
             fi
           EOF
