@@ -37,7 +37,10 @@ class SweAPIView(APIView):
         predictions = request.GET.get('predictions')
         
         with open(f'{APP_DIR}/SWE-bench/predictions.jsonl', 'w') as f:
-            json.dump(predictions, f)
+            for prediction in predictions:
+                json.dump(prediction, f)
+                f.write('\n')
+            f.close()
 
         # try:
         #     result = subprocess.run(
