@@ -62,7 +62,7 @@ class SweAPIView(APIView):
         command = [
             swebench_python, swebench_script,
             "--dataset_name", dataset_name,
-            "--max_workers", max_workers,
+            "--max_workers", str(max_workers),
             "--instance_ids", " ".join(instance_ids),
             "--run_id", run_id,
             "--predictions_path", f"{APP_DIR}/SWE-bench/predictions.jsonl",
