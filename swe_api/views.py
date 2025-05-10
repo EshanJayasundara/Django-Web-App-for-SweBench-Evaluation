@@ -39,16 +39,3 @@ class SampleAPIView(APIView):
 
         # except Exception as e:
         #     return Response(f"Caller: subprocess failed: {e}")
-
-@method_decorator(csrf_exempt, name='dispatch')
-class GenerateApiKeyView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request):
-        user = request.user
-        api_key_name = f"{user.username}_key"
-        api_key, key = APIKey.objects.create_key(name=api_key_name)
-
-        # Optionally, link key to user manually (you can extend model later)
-
-        return Response({"api_key": key})
