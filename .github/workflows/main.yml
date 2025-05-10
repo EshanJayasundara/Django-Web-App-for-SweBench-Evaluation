@@ -66,6 +66,5 @@ jobs:
             echo "Installing dependencies..."
             pip3 install -e .
             python manage.py migrate
-            python manage.py createsuperuser --noinput
             python manage.py runserver
           EOF
