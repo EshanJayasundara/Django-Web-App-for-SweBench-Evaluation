@@ -40,7 +40,7 @@ class SampleAPIView(APIView):
         # except Exception as e:
         #     return Response(f"Caller: subprocess failed: {e}")
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class GenerateApiKeyView(APIView):
     permission_classes = [IsAuthenticated]
 
