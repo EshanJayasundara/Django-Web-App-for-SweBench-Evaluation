@@ -25,7 +25,7 @@ class SampleAPIView(APIView):
 class SweAPIView(APIView):
     permission_classes = [HasAPIKey]
 
-    def get(self, request, id=None):
+    def post(self, request, id=None):
         # APP_DIR = config('APP_DIR')
         # swebench_python = "SWE-bench/.venv/bin/python3"
         # swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
@@ -53,5 +53,8 @@ class SweAPIView(APIView):
 
         # except Exception as e:
         #     return Response(f"Caller: subprocess failed: {e}")
-        
-        return Response(request.GET.dict())
+        data = json.loads(request.body.decode('utf-8'))
+        return Response({
+                'data': "Request processed successfully",
+                'received_data': data
+            })
