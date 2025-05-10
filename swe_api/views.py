@@ -76,7 +76,7 @@ class SweAPIView(APIView):
                 timeout=300  # Increase timeout if SWE-bench takes longer
             )
 
-            response_data = dict([o.strip().split(":") for o in result.stdout.strip().split("\n") if ":" in o])
+            response_data = dict([o.strip().split(": ") for o in result.stdout.strip().split("\n") if ":" in o])
 
             return Response({
                 "status": "success",
