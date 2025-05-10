@@ -35,10 +35,26 @@ jobs:
             if [ ! -d "$APP_DIR" ]; then
               echo "Cloning the repository..."
               git clone $REPO_URL $APP_DIR
+              # Continue with deployment
+              cd $APP_DIR
+              echo "Creating venv..."
+              python3 -m venv .venv
+              echo "Activating venv..."
+              source .venv/bin/activate
+              echo "Installing dependencies..."
+              pip3 install -e .
+              python manage.py migrate
+              python manage.py collectstatic --noinput
+              python manage.py createsuperuser --noinput
+              python manage.py runserver
             else
               echo "Repository already cloned. Pulling latest changes..."
               cd $APP_DIR
               git pull origin main
+              # Continue with deployment
+              cd $APP_DIR
+              echo "Activating existing venv..."
+              python manage.py runserver
             fi
 
             # Continue with deployment
@@ -49,12 +65,7 @@ jobs:
             source .venv/bin/activate
             echo "Installing dependencies..."
             pip3 install -e .
-            echo "$DEBUG"
-            echo "$DJANGO_SECRET_KEY"
-            echo "$DJANGO_SUPERUSER_EMAIL"
-            echo "$DJANGO_SUPERUSER_USERNAME"
             python manage.py migrate
-            python manage.py collectstatic --noinput
             python manage.py createsuperuser --noinput
             python manage.py runserver
           EOF
