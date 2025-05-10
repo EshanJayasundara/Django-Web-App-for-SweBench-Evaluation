@@ -23,8 +23,13 @@ jobs:
       - name: Deploy to VM
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }} << 'EOF'
-            APP_DIR="/home/${{ secrets.GCP_VM_USER }}/swe_django_app"
-            REPO_URL=https://github.com/EshanJayasundara/Django-Web-App-for-SweBench-Evaluation.git
+            export APP_DIR="/home/${{ secrets.GCP_VM_USER }}/swe_django_app"
+            export REPO_URL=https://github.com/EshanJayasundara/Django-Web-App-for-SweBench-Evaluation.git
+            export DEBUG="${{ secrets.DEBUG }}"
+            export DJANGO_SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"
+            export DJANGO_SUPERUSER_EMAIL="${{ secrets.DJANGO_SUPERUSER_EMAIL }}"
+            export DJANGO_SUPERUSER_USERNAME="${{ secrets.DJANGO_SUPERUSER_USERNAME }}"
+            export DJANGO_SUPERUSER_PASSWORD="${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" 
 
             # Check if directory exists
             if [ ! -d "$APP_DIR" ]; then
@@ -48,8 +53,6 @@ jobs:
             echo "$DJANGO_SECRET_KEY"
             echo "$DJANGO_SUPERUSER_EMAIL"
             echo "$DJANGO_SUPERUSER_USERNAME"
-            echo "$GCP_VM_IP"
-            echo "$GCP_VM_USER"
             python manage.py migrate
             python manage.py collectstatic --noinput
             python manage.py createsuperuser --noinput
