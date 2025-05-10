@@ -57,6 +57,5 @@ jobs:
                source .venv/bin/activate
               echo -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY\nDEBUG=$DEBUG" > .env
               python manage.py migrate
-              python manage.py runserver
             fi
           EOF
