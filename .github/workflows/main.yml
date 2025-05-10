@@ -22,8 +22,8 @@ jobs:
 
       - name: Deploy to VM
         run: |
-          ssh -i ${{ secrets.GCP_SSH_PRIVATE_KEY }} ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }} << 'EOF'
-            APP_DIR=/home/${{ secrets.GCP_VM_USER }}/swe_django_app
+          ssh -i ~/.ssh/id_rsa ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }} << 'EOF'
+            APP_DIR="/home/${{ secrets.GCP_VM_USER }}/swe_django_app"
             REPO_URL=git@github.com:EshanJayasundara/Django-Web-App-for-SweBench-Evaluation
 
             # Check if directory exists
