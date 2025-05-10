@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import SampleAPIView
+from .views import SampleAPIView, SweAPIView
 
 urlpatterns = [
-    path('swe_eval/', SampleAPIView.as_view()),       # GET all, POST create
+    path('test/', SampleAPIView.as_view()),
+    path('swe_eval/', SweAPIView.as_view()),
 ]
