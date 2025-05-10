@@ -83,5 +83,8 @@ class SweAPIView(APIView):
                 "returncode": result.returncode
                 })
 
+        except subprocess.TimeoutExpired:
+            return Response({"status": "error", "details": "Subprocess timed out."})
+
         except Exception as e:
-            return Response(f"Caller: subprocess failed: {e}")
+            return Response({"status": "error", "details": str(e)})
