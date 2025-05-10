@@ -23,6 +23,7 @@ jobs:
       - name: Deploy to VM
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.GCP_VM_USER }}@${{ secrets.GCP_VM_IP }} << 'EOF'
+
             export APP_DIR="/home/${{ secrets.GCP_VM_USER }}/swe_django_app"
             export REPO_URL=https://github.com/EshanJayasundara/Django-Web-App-for-SweBench-Evaluation.git
             export DEBUG="${{ secrets.DEBUG }}"
@@ -33,29 +34,100 @@ jobs:
 
             # Check if directory exists
             if [ ! -d "$APP_DIR" ]; then
+
               echo "Cloning the repository..."
               git clone $REPO_URL $APP_DIR
+
               # Continue with deployment
               cd $APP_DIR
-              echo "Creating venv..."
+
+              echo "Cloning SWE-bench repo..."
+              git clone https://github.com/princeton-nlp/SWE-bench.git
+
+              cd SWE-bench
+
+              echo "Creating SWE-bench venv..."
               python3 -m venv .venv
-              echo "Activating venv..."
+
+              echo "Activating SWE-bench venv..."
               source .venv/bin/activate
-              echo "Installing dependencies..."
+
+              echo "Installing SWE-bench dependencies..."
               pip3 install -e .
-              echo -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY\nDEBUG=$DEBUG" > .env
+
+              echo "Deactivation SWE-bench venv..."
+              deactivate
+
+              echo "Go back to $APP_DIR"
+              cd ..
+
+              echo "Creating django venv..."
+              python3 -m venv .venv
+              
+              echo "Activating django venv..."
+              source .venv/bin/activate
+
+              echo "Installing django dependencies..."
+              pip3 install -e .
+
+              echo -e "DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY\nDEBUG=$DEBUG\nAPP_DIR=$APP_DIR" > .env
+
               python manage.py migrate
               python manage.py createsuperuser --noinput
-              python manage.py runserver
+
             else
+
               echo "Repository already cloned. Pulling latest changes..."
               cd $APP_DIR
               git pull origin main
+
               # Continue with deployment
               cd $APP_DIR
-              echo "Activating existing venv..."
-               source .venv/bin/activate
-              echo -e "DJANGO_SECRET_KEY='$DJANGO_SECRET_KEY'\nDEBUG=$DEBUG" > .env
+
+              if [ ! -d SWE-bench ]; then
+                echo "Cloning SWE-bench repo..."
+                git clone https://github.com/princeton-nlp/SWE-bench.git
+              
+              cd SWE-bench
+
+              if [ ! -d .venv ]; then
+                echo "Creating new venv..."
+                python3 -m venv .venv
+                echo "Activating new venv..."
+                source .venv/bin/activate
+                pip3 install -e .
+
+              else
+
+                echo "Activating existing venv..."
+                source .venv/bin/activate
+                pip3 install -e .
+
+              fi
+
+              deactivate
+              
+              cd ..
+              
+              if [ ! -d .venv ]; then
+
+                echo "Creating new venv..."
+                python3 -m venv .venv
+                echo "Activating new venv..."
+                source .venv/bin/activate
+                pip3 install -e .
+
+              else
+
+                echo "Activating existing venv..."
+                source .venv/bin/activate
+                pip3 install -e .
+
+              fi
+
+              echo -e "DJANGO_SECRET_KEY='$DJANGO_SECRET_KEY'\nDEBUG=$DEBUG\nAPP_DIR=$APP_DIR" > .env
               python manage.py migrate
+
             fi
+
           EOF
