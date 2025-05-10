@@ -30,11 +30,13 @@ class SweAPIView(APIView):
         swebench_python = "SWE-bench/.venv/bin/python3"
         swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
 
-        dataset_name = request.GET.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
-        max_workers = request.GET.get('max_workers', 1)
-        instance_ids = request.GET.get('instance_ids', 'sympy__sympy-20590')
-        run_id = request.GET.get('run_id', 'validate_gold')
-        predictions = request.GET.get('predictions')
+        data = json.loads(request.body.decode('utf-8'))
+
+        dataset_name = data.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
+        max_workers = data.get('max_workers', 1)
+        instance_ids = data.get('instance_ids', 'sympy__sympy-20590')
+        run_id = data.get('run_id', 'validate_gold')
+        predictions = data.get('predictions', None)
         
         with open(f'{APP_DIR}/SWE-bench/predictions.jsonl', 'w') as f:
             for prediction in predictions:
@@ -59,7 +61,7 @@ class SweAPIView(APIView):
 
         # except Exception as e:
         #     return Response(f"Caller: subprocess failed: {e}")
-        data = json.loads(request.body.decode('utf-8'))
+        
         return Response({
                 'data': "Request processed successfully",
                 'received_data': [dataset_name, max_workers, instance_ids, run_id]
