@@ -18,7 +18,7 @@ class SampleAPIView(APIView):
 
     def get(self, request, id=None):
         return Response({
-            "data": "Successfully, you reached an endpoint authenticated with an API-Key."
+            "data": "Successfully, you reached the 'test' endpoint authenticated with an API-Key."
         })
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -34,35 +34,54 @@ class SweAPIView(APIView):
 
         dataset_name = data.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
         max_workers = data.get('max_workers', 1)
-        instance_ids = data.get('instance_ids', 'sympy__sympy-20590')
-        run_id = data.get('run_id', 'validate_gold')
+        run_id = data.get('run_id', 'my_first_evaluation')
         predictions = data.get('predictions', None)
-        
+        instance_ids = []
+
+        if len(predictions) > 1:
+            return Response("Eventhough, 'predictions' is a list. Currently support only one prediction at a time.")
+
         with open(f'{APP_DIR}/SWE-bench/predictions.jsonl', 'w') as f:
             for prediction in predictions:
+                if set(prediction.keys()) != {"instance_id", "model_name_or_path", "model_patch"}:
+                    return Response("Invalid keys in predictions list.")
+                instance_ids.append(prediction['instance_id'])
                 json.dump(prediction, f)
                 f.write('\n')
             f.close()
 
-        # try:
-        #     result = subprocess.run(
-        #         [swebench_python, swebench_script, "HelloFromCaller"],
-        #         capture_output=True,
-        #         text=True,
-        #         timeout=300
-        #     )
-
-        #     return Response({
-        #         'data': "Caller: subprocess completed",
-        #         "STDOUT": f"{result.stdout.strip()}",
-        #         "STDERR": f"{result.stderr.strip()}",
-        #         "Return Code": f"{result.returncode}"
-        #         })
-
-        # except Exception as e:
-        #     return Response(f"Caller: subprocess failed: {e}")
+        if max_workers > 3:
+            return Response("Maximim worksers allowed is 3.")
         
-        return Response({
-                'data': "Request processed successfully",
-                'received_data': [dataset_name, max_workers, instance_ids, run_id]
-            })
+        if dataset_name != 'princeton-nlp/SWE-bench_Lite':
+            return Response("Currently only 'princeton-nlp/SWE-bench_Lite' is supported")
+        
+        if not predictions:
+            return Response("Predictions can not be empty.")
+
+        command = [
+            swebench_python, swebench_script,
+            "--dataset_name", dataset_name,
+            "--max_workers", max_workers,
+            "--instance_ids", " ".join(instance_ids),
+            "--run_id", run_id,
+            "--predictions_path", f"{APP_DIR}/SWE-bench/predictions.jsonl",
+        ]
+
+        try:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=300  # Increase timeout if SWE-bench takes longer
+            )
+
+            return Response({
+                "status": "success",
+                "stdout": result.stdout.strip(),
+                "stderr": result.stderr.strip(),
+                "returncode": result.returncode
+                })
+
+        except Exception as e:
+            return Response(f"Caller: subprocess failed: {e}")
