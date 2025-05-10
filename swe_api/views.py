@@ -26,16 +26,19 @@ class SweAPIView(APIView):
     permission_classes = [HasAPIKey]
 
     def post(self, request, id=None):
-        # APP_DIR = config('APP_DIR')
-        # swebench_python = "SWE-bench/.venv/bin/python3"
-        # swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
+        APP_DIR = config('APP_DIR')
+        swebench_python = "SWE-bench/.venv/bin/python3"
+        swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
 
-        # dataset_name = request.GET.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
-        # max_workers = request.GET.get('max_workers', 1)
-        # instance_ids = request.GET.get('instance_ids', 'sympy__sympy-20590')
-        # run_id = request.GET.get('run_id', 'validate_gold')
-        # prediction = request.GET.get('prediction')
+        dataset_name = request.GET.get('dataset_name', 'princeton-nlp/SWE-bench_Lite')
+        max_workers = request.GET.get('max_workers', 1)
+        instance_ids = request.GET.get('instance_ids', 'sympy__sympy-20590')
+        run_id = request.GET.get('run_id', 'validate_gold')
+        predictions = request.GET.get('predictions')
         
+        with open(f'{APP_DIR}/SWE-bench/predictions.jsonl', 'w') as f:
+            json.dump(predictions, f)
+
         # try:
         #     result = subprocess.run(
         #         [swebench_python, swebench_script, "HelloFromCaller"],
@@ -56,5 +59,5 @@ class SweAPIView(APIView):
         data = json.loads(request.body.decode('utf-8'))
         return Response({
                 'data': "Request processed successfully",
-                'received_data': data
+                'received_data': [dataset_name, max_workers, instance_ids, run_id]
             })
