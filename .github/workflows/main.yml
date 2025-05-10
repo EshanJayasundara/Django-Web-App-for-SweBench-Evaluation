@@ -87,6 +87,7 @@ jobs:
               if [ ! -d SWE-bench ]; then
                 echo "Cloning SWE-bench repo..."
                 git clone https://github.com/princeton-nlp/SWE-bench.git
+              fi
               
               cd SWE-bench
 
