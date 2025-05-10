@@ -44,6 +44,12 @@ jobs:
             source .venv/bin/activate
             echo "Installing dependencies..."
             pip3 install -e .
+            echo "$DEBUG"
+            echo "$DJANGO_SECRET_KEY"
+            echo "$DJANGO_SUPERUSER_EMAIL"
+            echo "$DJANGO_SUPERUSER_USERNAME"
+            echo "$GCP_VM_IP"
+            echo "$GCP_VM_USER"
             python manage.py migrate
             python manage.py collectstatic --noinput
             python manage.py createsuperuser --noinput
