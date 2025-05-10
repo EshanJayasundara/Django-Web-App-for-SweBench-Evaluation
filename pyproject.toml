@@ -7,7 +7,7 @@ name = "Django_Web_App_for_SWE_Bench_Evaluation"
 version = "0.1.0"
 description = "Private API to evaluate your LLM with SWEBench."
 readme = "README.md"
-requires-python = "==3.12.4"
+requires-python = ">=3.12,<3.13"
 
 dependencies = [
   "Django>=5.2.1",
