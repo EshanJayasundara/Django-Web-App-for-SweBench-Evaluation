@@ -41,7 +41,7 @@ class SweAPIView(APIView):
         if len(predictions) > 1:
             return Response("Eventhough, 'predictions' is a list. Currently support only one prediction at a time.")
 
-        with open(f'{APP_DIR}/SWE-bench/predictions.jsonl', 'w') as f:
+        with open(f'SWE-bench/predictions.jsonl', 'w') as f:
             for prediction in predictions:
                 if set(prediction.keys()) != {"instance_id", "model_name_or_path", "model_patch"}:
                     return Response("Invalid keys in predictions list.")
