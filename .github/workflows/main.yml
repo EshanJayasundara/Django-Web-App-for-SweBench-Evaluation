@@ -1,9 +1,10 @@
 name: Deploy Django to GCP VM
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Django Tests"]
+    types:
+      - completed
 
 jobs:
   deploy:
