@@ -24,8 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool, default=False)
 
-
-ALLOWED_HOSTS = ["35.202.22.71", "127.0.0.1", "localhost", "eshan-swe-eval.mooo.com", "www.eshan-swe-eval.mooo.com"]
+ALLOWED_HOSTS = [config('GCP_VM_IP'), "127.0.0.1", "localhost", "eshan-swe-eval.mooo.com", "www.eshan-swe-eval.mooo.com"]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://eshan-swe-eval.mooo.com',
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'swe_api.apps.SweApiConfig',
     'rest_framework',
     'rest_framework_api_key',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [

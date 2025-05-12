@@ -31,6 +31,7 @@ jobs:
             export DJANGO_SUPERUSER_EMAIL="${{ secrets.DJANGO_SUPERUSER_EMAIL }}"
             export DJANGO_SUPERUSER_USERNAME="${{ secrets.DJANGO_SUPERUSER_USERNAME }}"
             export DJANGO_SUPERUSER_PASSWORD="${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" 
+            export GCP_VM_IP = "${{ secrets.GCP_VM_IP }}"
 
             # Check if directory exists
             if [ ! -d "$APP_DIR" ]; then
@@ -126,7 +127,7 @@ jobs:
 
               fi
 
-              echo -e "DJANGO_SECRET_KEY='$DJANGO_SECRET_KEY'\nDEBUG=$DEBUG\nAPP_DIR=$APP_DIR" > .env
+              echo -e "DJANGO_SECRET_KEY='$DJANGO_SECRET_KEY'\nDEBUG=$DEBUG\nAPP_DIR=$APP_DIR\nGCP_VM_IP=$GCP_VM_IP" > .env
               python manage.py migrate
 
             fi
