@@ -40,7 +40,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo -e "DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}'\nDEBUG=${{ secrets.DEBUG }}\nAPP_DIR=${{ secrets.APP_DIR }}\nGCP_VM_IP=${{ secrets.GCP_VM_IP }}" > .env
+          echo -e "DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}'\nDEBUG='${{ secrets.DEBUG }}'\nAPP_DIR='${{ secrets.APP_DIR }}'\nGCP_VM_IP='${{ secrets.GCP_VM_IP }}'" > .env
 
       - name: Run migrations
         run: |
@@ -82,7 +82,7 @@ jobs:
             export DJANGO_SUPERUSER_PASSWORD="${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" 
             export GCP_VM_IP = "${{ secrets.GCP_VM_IP }}"
 
-            echo -e "DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}'\nDEBUG=${{ secrets.DEBUG }}\nAPP_DIR=${{ secrets.APP_DIR }}\nGCP_VM_IP=${{ secrets.GCP_VM_IP }}" > .env
+            echo -e "DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}'\nDEBUG='${{ secrets.DEBUG }}'\nAPP_DIR='$APP_DIR'\nGCP_VM_IP='${{ secrets.GCP_VM_IP }}'" > .env
 
             # Check if directory exists
             if [ ! -d "$APP_DIR" ]; then
