@@ -82,7 +82,7 @@ jobs:
             export DJANGO_SUPERUSER_PASSWORD="${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" 
             export GCP_VM_IP = "${{ secrets.GCP_VM_IP }}"
 
-            echo -e "DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}'\nDEBUG='${{ secrets.DEBUG }}'\nAPP_DIR='/home/${{ secrets.GCP_VM_USER }}/swe_django_app'\nGCP_VM_IP='${{ secrets.GCP_VM_IP }}'" > .env
+            echo -e "DJANGO_SECRET_KEY='$DJANGO_SECRET_KEY'\nDEBUG='$DEBUG'\nAPP_DIR='$APP_DIR'\nGCP_VM_IP='$GCP_VM_IP'" > \$APP_DIR/.env
 
             # Check if directory exists
             if [ ! -d "$APP_DIR" ]; then
