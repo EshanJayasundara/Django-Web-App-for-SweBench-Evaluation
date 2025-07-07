@@ -14,15 +14,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from decouple import config
 import os
 
-UPLOAD_DIR = os.path.join(config('APP_DIR'), "SWE-bench", "uploaded_files")
-os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure dir exists
-
 @method_decorator(csrf_exempt, name='dispatch')
 class FileUploadView(APIView):
     permission_classes = [HasAPIKey]
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request, *args, **kwargs):
+        UPLOAD_DIR = os.path.join(config('APP_DIR'), "SWE-bench", "uploaded_files")
+        os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure dir exists
         uploaded_file = request.FILES.get('file')
 
         if not uploaded_file:
@@ -136,6 +135,9 @@ class SweAPIView(APIView):
     #         return Response({"status": "error", "details": str(e)})
 
     def post(self, request, id=None):
+        UPLOAD_DIR = os.path.join(config('APP_DIR'), "SWE-bench", "uploaded_files")
+        os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure dir exists
+        
         swebench_python = "SWE-bench/.venv/bin/python3"
         swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
 
