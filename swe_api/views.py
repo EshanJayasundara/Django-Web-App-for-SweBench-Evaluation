@@ -37,11 +37,18 @@ class FileUploadView(APIView):
             for chunk in uploaded_file.chunks():
                 destination.write(chunk)
 
-        return Response({
+        response = Response({
             "status": "success",
             "message": f"File '{uploaded_file.name}' uploaded successfully.",
             "path": file_path
         })
+
+        # Prevent caching by clients/proxies
+        response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+        response["Pragma"] = "no-cache"
+        response["Expires"] = "0"
+
+        return response
 
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -218,13 +225,20 @@ class SweAPIView(APIView):
             with open(f"{APP_DIR}/debugai.{run_id}.json", 'r', encoding='utf-8') as f:
                 data = json.load(f)
 
-            return Response({
+            response = Response({
                 "status": "success",
                 "data": data,
                 "stdout": result.stdout.strip().split("\n"),
                 "stderr": result.stderr.strip(),
                 "returncode": result.returncode
             })
+        
+            # Prevent caching by clients/proxies
+            response["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            response["Pragma"] = "no-cache"
+            response["Expires"] = "0"
+            
+            return response
 
         except subprocess.TimeoutExpired:
             return Response({"status": "error", "details": "Subprocess timed out."})
