@@ -30,7 +30,7 @@ class FileUploadView(APIView):
         if not uploaded_file.name.endswith('.jsonl'):
             return Response({"status": "error", "message": "Only .jsonl files are allowed."})
 
-        file_path = os.path.join(UPLOAD_DIR, uploaded_file.name)
+        file_path = os.path.join(UPLOAD_DIR, "predictions.jsonl")
 
         # Save the uploaded file
         with open(file_path, 'wb+') as destination:
