@@ -77,19 +77,19 @@ class SweAPIView(APIView):
             )
 
             # response_data = dict([o.strip().split(": ") for o in result.stdout.strip().split("\n") if ":" in o])
-            response_data = {}
-            for line in result.stdout.strip().split("\n"):
-                if ":" in line:
-                    try:
-                        key, value = line.strip().split(":", 1)
-                        response_data[key.strip()] = value.strip()
-                    except ValueError as e:
-                        # Log or skip malformed lines
-                        print(f"Skipping malformed line: {line} -- {e}")
+            # response_data = {}
+            # for line in result.stdout.strip().split("\n"):
+            #     if ":" in line:
+            #         try:
+            #             key, value = line.strip().split(":", 1)
+            #             response_data[key.strip()] = value.strip()
+            #         except ValueError as e:
+            #             # Log or skip malformed lines
+            #             print(f"Skipping malformed line: {line} -- {e}")
 
             return Response({
                 "status": "success",
-                "data": response_data,
+                "data": result.stdout.strip().split("\n"), # response_data,
                 "stderr": result.stderr.strip(),
                 "returncode": result.returncode
                 })
