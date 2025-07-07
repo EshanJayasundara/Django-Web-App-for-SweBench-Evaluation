@@ -19,7 +19,7 @@ class FileUploadView(APIView):
     permission_classes = [HasAPIKey]
     parser_classes = [MultiPartParser, FormParser]
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, id=None):
         UPLOAD_DIR = os.path.join(config('APP_DIR'), "SWE-bench", "uploaded_files")
         os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure dir exists
         uploaded_file = request.FILES.get('file')
@@ -137,7 +137,7 @@ class SweAPIView(APIView):
     def post(self, request, id=None):
         UPLOAD_DIR = os.path.join(config('APP_DIR'), "SWE-bench", "uploaded_files")
         os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure dir exists
-        
+
         swebench_python = "SWE-bench/.venv/bin/python3"
         swebench_script = "SWE-bench/swebench/harness/run_evaluation.py"
 
