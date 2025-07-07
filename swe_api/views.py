@@ -76,7 +76,16 @@ class SweAPIView(APIView):
                 timeout=300  # Increase timeout if SWE-bench takes longer
             )
 
-            response_data = dict([o.strip().split(": ") for o in result.stdout.strip().split("\n") if ":" in o])
+            # response_data = dict([o.strip().split(": ") for o in result.stdout.strip().split("\n") if ":" in o])
+            response_data = {}
+            for line in result.stdout.strip().split("\n"):
+                if ":" in line:
+                    try:
+                        key, value = line.strip().split(":", 1)
+                        response_data[key.strip()] = value.strip()
+                    except ValueError as e:
+                        # Log or skip malformed lines
+                        print(f"Skipping malformed line: {line} -- {e}")
 
             return Response({
                 "status": "success",
