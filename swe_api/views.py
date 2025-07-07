@@ -60,10 +60,11 @@ class SweAPIView(APIView):
             return Response("Predictions can not be empty.")
 
         command = [
-            swebench_python, swebench_script,
+            swebench_python,
+            swebench_script,
             "--dataset_name", dataset_name,
             "--max_workers", str(max_workers),
-            "--instance_ids", " ".join(instance_ids),
+            "--instance_ids", *instance_ids,  # ✅ this expands to multiple args
             "--run_id", run_id,
             "--predictions_path", f"{APP_DIR}/SWE-bench/predictions.jsonl",
         ]
@@ -91,8 +92,8 @@ class SweAPIView(APIView):
                 "status": "success",
                 "data": result.stdout.strip().split("\n"), # response_data,
                 "stderr": result.stderr.strip(),
-                "returncode": result.returncode,
-                "command": command
+                "returncode": result.returncode
+                # "command": command
                 })
 
         except subprocess.TimeoutExpired:
