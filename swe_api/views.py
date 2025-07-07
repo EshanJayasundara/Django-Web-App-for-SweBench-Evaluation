@@ -188,8 +188,8 @@ class SweAPIView(APIView):
         if not updated_predictions:
             return Response({"status": "error", "details": "Predictions cannot be empty."})
 
-        if max_workers > 3:
-            return Response({"status": "error", "details": "Maximum workers allowed is 3."})
+        if max_workers > 4:
+            return Response({"status": "error", "details": "Maximum workers allowed is 4."})
 
         if dataset_name != 'princeton-nlp/SWE-bench_Lite':
             return Response({"status": "error", "details": "Only 'princeton-nlp/SWE-bench_Lite' is supported."})
@@ -214,7 +214,7 @@ class SweAPIView(APIView):
 
             with open(f"{APP_DIR}/debugai.{run_id}.json", 'r', encoding='utf-8') as f:
                 data = json.load(f)
-                
+
             return Response({
                 "status": "success",
                 "data": data,
