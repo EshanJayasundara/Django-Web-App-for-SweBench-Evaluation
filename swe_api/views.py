@@ -163,6 +163,9 @@ class SweAPIView(APIView):
                         prediction = json.loads(line)
                     except json.JSONDecodeError:
                         return Response({"status": "error", "details": "Invalid JSON in predictions file."})
+                    
+                    if "patch" in prediction:
+                        prediction["model_patch"] = prediction.pop("patch")
 
                     if "model_name_or_path" not in prediction:
                         prediction["model_name_or_path"] = "debugai"
