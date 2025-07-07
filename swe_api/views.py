@@ -212,10 +212,12 @@ class SweAPIView(APIView):
                 timeout=300
             )
 
-            with open(f"{APP_DIR}/{run_id}")
+            with open(f"{APP_DIR}/debugai.{run_id}.json", 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                
             return Response({
                 "status": "success",
-                "data": 
+                "data": data,
                 "stdout": result.stdout.strip().split("\n"),
                 "stderr": result.stderr.strip(),
                 "returncode": result.returncode
