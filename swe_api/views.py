@@ -38,8 +38,8 @@ class SweAPIView(APIView):
         predictions = data.get('predictions', None)
         instance_ids = []
 
-        if len(predictions) > 1:
-            return Response("Eventhough, 'predictions' is a list. Currently support only one prediction at a time.")
+        # if len(predictions) > 1:
+        #     return Response("Eventhough, 'predictions' is a list. Currently support only one prediction at a time.")
 
         with open(f'{APP_DIR}/SWE-bench/predictions.jsonl', 'w') as f:
             for prediction in predictions:
