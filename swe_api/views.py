@@ -91,7 +91,8 @@ class SweAPIView(APIView):
                 "status": "success",
                 "data": result.stdout.strip().split("\n"), # response_data,
                 "stderr": result.stderr.strip(),
-                "returncode": result.returncode
+                "returncode": result.returncode,
+                "command": command
                 })
 
         except subprocess.TimeoutExpired:
