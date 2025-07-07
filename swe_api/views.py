@@ -135,7 +135,8 @@ class SweAPIView(APIView):
     #         return Response({"status": "error", "details": str(e)})
 
     def post(self, request, id=None):
-        UPLOAD_DIR = os.path.join(config('APP_DIR'), "SWE-bench", "uploaded_files")
+        APP_DIR = config('APP_DIR')
+        UPLOAD_DIR = os.path.join(APP_DIR, "SWE-bench", "uploaded_files")
         os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure dir exists
 
         swebench_python = "SWE-bench/.venv/bin/python3"
@@ -149,10 +150,11 @@ class SweAPIView(APIView):
         if not predictions_path:
             return Response({"status": "error", "details": "Missing 'predictions_path' parameter."})
 
+        updated_predictions = []
+        instance_ids = []
         try:
+            # Read and modify
             with open(predictions_path, 'r', encoding='utf-8') as f:
-                predictions = []
-                instance_ids = []
                 for line in f:
                     line = line.strip()
                     if not line:
@@ -162,17 +164,28 @@ class SweAPIView(APIView):
                     except json.JSONDecodeError:
                         return Response({"status": "error", "details": "Invalid JSON in predictions file."})
 
-                    if set(prediction.keys()) != {"instance_id", "model_name_or_path", "model_patch"}:
+                    if "model_name_or_path" not in prediction:
+                        prediction["model_name_or_path"] = "debugai"
+
+                    required_keys = {"instance_id", "model_name_or_path", "model_patch"}
+                    if set(prediction.keys()) != required_keys:
                         return Response({"status": "error", "details": f"Invalid keys in prediction: {prediction}"})
 
-                    predictions.append(prediction)
+                    updated_predictions.append(prediction)
                     instance_ids.append(prediction['instance_id'])
+
+            # Write back to the same file
+            with open(predictions_path, 'w', encoding='utf-8') as f:
+                for prediction in updated_predictions:
+                    json.dump(prediction, f)
+                    f.write('\n')
+
         except FileNotFoundError:
             return Response({"status": "error", "details": f"Predictions file not found: {predictions_path}"})
         except Exception as e:
             return Response({"status": "error", "details": f"Error reading predictions file: {str(e)}"})
 
-        if not predictions:
+        if not updated_predictions:
             return Response({"status": "error", "details": "Predictions cannot be empty."})
 
         if max_workers > 3:
@@ -199,9 +212,11 @@ class SweAPIView(APIView):
                 timeout=300
             )
 
+            with open(f"{APP_DIR}/{run_id}")
             return Response({
                 "status": "success",
-                "data": result.stdout.strip().split("\n"),
+                "data": 
+                "stdout": result.stdout.strip().split("\n"),
                 "stderr": result.stderr.strip(),
                 "returncode": result.returncode
             })
