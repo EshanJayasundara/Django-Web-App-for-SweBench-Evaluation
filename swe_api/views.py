@@ -198,8 +198,8 @@ class SweAPIView(APIView):
         if not updated_predictions:
             return Response({"status": "error", "details": "Predictions cannot be empty."})
 
-        if max_workers > 4:
-            return Response({"status": "error", "details": "Maximum workers allowed is 4."})
+        if max_workers > 10:
+            return Response({"status": "error", "details": "Maximum workers allowed is 10."})
 
         if dataset_name != 'princeton-nlp/SWE-bench_Lite':
             return Response({"status": "error", "details": "Only 'princeton-nlp/SWE-bench_Lite' is supported."})
