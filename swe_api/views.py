@@ -216,7 +216,6 @@ class SweAPIView(APIView):
         try:
             result = subprocess.run(
                 command,
-                capture_output=True,
                 text=True,
             )
 
