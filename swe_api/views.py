@@ -230,11 +230,6 @@ class SweAPIView(APIView):
                 "stderr": result.stderr.strip(),
                 "returncode": result.returncode
             })
-        
-            # Prevent caching by clients/proxies
-            response["Cache-Control"] = "no-cache, no-store, must-revalidate"
-            response["Pragma"] = "no-cache"
-            response["Expires"] = "0"
             
             return response
 
