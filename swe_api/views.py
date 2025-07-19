@@ -219,7 +219,6 @@ class SweAPIView(APIView):
                 command,
                 capture_output=True,
                 text=True,
-                timeout=300
             )
 
             with open(f"{APP_DIR}/debugai.{run_id}.json", 'r', encoding='utf-8') as f:
