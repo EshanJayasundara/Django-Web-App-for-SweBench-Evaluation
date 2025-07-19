@@ -175,8 +175,10 @@ class SweAPIView(APIView):
                         prediction["model_patch"] = prediction.pop("patch")
 
                     if "model_name_or_path" not in prediction:
-                        if prediction["model_name_or_path"] != "debugai":
-                            prediction["model_name_or_path"] = "debugai"
+                        prediction["model_name_or_path"] = "debugai"
+                    elif prediction["model_name_or_path"] != "debugai":
+                        prediction["model_name_or_path"] = "debugai"
+                        
 
                     required_keys = {"instance_id", "model_name_or_path", "model_patch"}
                     if set(prediction.keys()) != required_keys:
